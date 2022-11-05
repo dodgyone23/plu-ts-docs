@@ -1,0 +1,6 @@
+[book]
+authors = ["michele-nuzzi"]
+language = "en"
+multilingual = false
+src = "src"
+title = "plu-ts documentation"
