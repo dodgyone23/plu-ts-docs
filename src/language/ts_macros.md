@@ -1,1 +1,2 @@
-# plu-ts values
+# Typescript values as macros
+

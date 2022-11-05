@@ -4,7 +4,6 @@
 - [Language](./language/index.md)
     - [Core ideas](./language/core_ideas.md)
     - [eDSL concepts](./language/eDSL_concepts.md)
-        - [Typescript values as macros](./language/ts_macros.md)
     - [`plu-ts` values](./language/pluts_values.md)
         - [functions](./language/pluts_functions.md)
         - [structs](./language/pluts_structs.md)
