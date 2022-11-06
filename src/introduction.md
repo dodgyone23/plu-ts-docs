@@ -1,5 +1,7 @@
 # plu-ts
 
+built with ❤️ by the [Harmonic Laboratories](https://www.harmoniclabs.tech/)
+
 `plu-ts` is a libarary designed to build Cardano dApp in an efficient and developer friendly way;
 
 It is composed by two main parts:

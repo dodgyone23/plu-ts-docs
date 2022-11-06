@@ -1,2 +1,0 @@
-# Typescript values as macros
-
