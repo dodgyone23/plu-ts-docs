@@ -1,6 +1,6 @@
 # papp
 
-Lambdas and functions in general in `plu-ts` are ofthen just constants seen from the typescript world;
+Lambdas and functions in general in `plu-ts` are often just constants seen from the typescript world;
 
 however we usally know that what we have is more than just a constant and that it can take arguments.
 
@@ -35,7 +35,7 @@ papp(
 );
 ```
 
-for this reason ofthen you'll encounter Terms that have a type that looks like this
+for this reason often you'll encounter Terms that have a type that looks like this
 ```ts
 type LambdaWithApply =
     Term<PLam<SomeInput, SomeOutput>> // this is our usual type
@@ -44,7 +44,7 @@ type LambdaWithApply =
     }
 ```
 
-where the `$` method definition si ofthen nothing more than
+where the `$` method definition si often nothing more than
 ```ts
 myTerm["$"] = ( someInput: Term<SomeInput> ) => papp( myTerm, someInput );
 ```
