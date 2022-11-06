@@ -13,7 +13,7 @@ It is composed by two main parts:
 
 `plu-ts` was designed with the following goals in mind, in order of importance:
 
-- Smart Copntract efficiency
+- Smart Contract efficiency
 - reduced script size
 - developer experience
 - readability
@@ -28,5 +28,7 @@ It is composed by two main parts:
     - [x] Terms with utility methods to simplify the developer experience ( `TermInt`, `TermBool`, etc... )
 - v0.2.0 :
     - [ ] functions for standard API data structures interaction
+    - [ ] `plu-ts/offchain` functions for basic transactions
 - v0.3.0 :
     - [ ] `TermCont` implementation to mitigate the callback hell issue
+    - [ ] `plu-ts/offchain` complete offchain API

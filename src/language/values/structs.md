@@ -22,7 +22,7 @@ from this typw we can already see that a struct can have *multiple constructors*
 
 and each constructor can have 0 or more named fields;
 
-this characteristic of having multiple constructors will allow the creation of *custom control flows* through the use of `pmatch` described in [its own section](../control_flow/pmatch.md).
+this characteristic of having multiple constructors will allow the creation of *custom control flows* through the use of [`pmatch` described in its own section](../control_flow/pmatch.md).
 
 for now lets focus on defning some new structs and say we wanted to define a datatype that describes a Dog
 
@@ -89,7 +89,7 @@ const Dog = pstruct({
 
 ## struct values
 
-To built a `plu-ts` value that rapresents a struct you just use one fo the constructors you defined;
+To build a `plu-ts` value that rapresents a struct you just use one fo the constructors you defined;
 
 so if you where to create an instance of a `Dog` you'd just write:
 ```ts
@@ -108,7 +108,7 @@ const myDog = Dog.Dog({
 
 ## struct `plu-ts` type
 
-just like [aliases](./aliases.md), structs also do have custom `plu-ts` types; which can be accessed using the `type` static property
+Like [aliases](./aliases.md), structs also do have custom `plu-ts` types; which can be accessed using the `type` static property
 
 ```ts
 const plutsTypeOfToy = Toy.type;

@@ -40,7 +40,9 @@ const pintIsZero = makeLambdaFromIntToBool(
 ```
 > **_NOTE_**: is convention to name `plu-ts` functions starting with a lower case "p"; indicating that we are in the `plu-ts` world and not the typescript one
 
-here we used the `peqInt` builtin function; the `$` methods is how we pass argument to a `plu-ts` function (we'll cover function application better in the [key syntax section](./key_syntax/func_app.md)), what matters for now is that we succesfully transformed an `int` to a `bool` using only `plu-ts`; and we now have a new function that we can re-use when needed
+here we used the `peqInt` builtin function; the `$` method is a short form for the [`papp` function](./papp.md) and is how we pass argument to a `plu-ts` function (we'll cover function application in the very next section)
+
+what matters for now is that we succesfully transformed an `int` into a `bool` using only `plu-ts`; and we now have a new function that we can re-use when needed
 ```ts
 pintIsZero.$( pInt(42) ) // this is a Term<PBool> equivalent to `pBool( false )`
 ```
