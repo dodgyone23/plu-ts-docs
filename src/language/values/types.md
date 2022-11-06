@@ -40,7 +40,7 @@ in the same order of above, the `plu-ts` equivalents are:
 - `delayed( type )`
 - `lam( from, to )`
 - `fn([ ...inputs ], output )`
-- aliases types and structs types will be retreived by the `type` static property of the classes (explained in [structs and aliases](./pluts_structs.md))
+- aliases types and structs types will be retreived by the `type` static property of the classes (explained in the dedicated section for [aliases](./aliases.md) and [structs](./structs.md))
 
 ### type variables
 
