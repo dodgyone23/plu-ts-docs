@@ -1,6 +1,6 @@
 # pmatch
 
-When we hasd our first look at [`pstruct`](../values/structs.md) we hinted to the possibility of _custom control flows_
+When we had our first look at [`pstruct`](../values/structs.md) we hinted to the possibility of _custom control flows_
 
 these are possible thanks to the `pmatch` construct.
 

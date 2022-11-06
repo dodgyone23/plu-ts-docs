@@ -2,7 +2,7 @@
 
 When a `plu-ts` function takes more than one argument, like the [`pTwoIntegersList` we built a moment ago](./index.md), it is possible to get new functions from the first by passing only *some* of the parameters.
 
-since the type of `pTwoIntegersList` was something like `int -> int -> list( int )`; `pTwoIntegersList` expects *2* atguments; however if we pass only 1 the result will be a valid term of type `int -> list( int )`; which is an other `plu-ts` function!
+since the type of `pTwoIntegersList` was something like `int -> int -> list( int )`; `pTwoIntegersList` expects *2* arguments; however if we pass only 1 the result will be a valid term of type `int -> list( int )`; which is an other `plu-ts` function!
 ```ts
  // this is a Term from PInt to PList<PInt>!
 const pListWith42First = pTwoIntegersList.$( pInt(42) );

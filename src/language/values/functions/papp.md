@@ -2,7 +2,7 @@
 
 Lambdas and functions in general in `plu-ts` are ofthen just constants seen from the typescript world;
 
-however we usally know that what we have is more than just a constant and thati it can take arguments.
+however we usally know that what we have is more than just a constant and that it can take arguments.
 
 For this particular reason we have the `papp` function (which stands  for  "*`plu-ts` applicaiton*")
 

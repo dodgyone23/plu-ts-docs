@@ -7,7 +7,8 @@ currently aliases can be used everywhere the aliased type is accepted and vice-v
 
 > generally speaking you may want to use aliases to define a *subset* of values that are meant to have a specific meaning
 >
-> example: you migth need a type that describes the name of a person; every name is a string; but not every string is a name
+> example: you might need a type that describes the name of a person; every name is a string; but not every string is a name;
+>
 > to make clear the distinction you define an alias of the `string` type to be the `Name` type
 
 We define new aliases using the `palias` ts function
