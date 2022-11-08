@@ -18,7 +18,7 @@ here we cover the simple ones, leaving [functions](./pluts_functions.md) and [st
 
 ## * `pList`
 
-since `PList` is a generic type the `pList` function has a slightly more complex funcioton signature:
+since `PList` is a generic type the `pList` function has a slightly more complex function signature:
 ```ts
 function pList<ElemsT extends TermType, PElemsT extends ToPType<ElemsT = ToPType<ElemsT>( elemsT: ElemsT )
     : ( elems: Term<PElemsT>[] ) => Term<PList<PElemsT>>
