@@ -207,7 +207,7 @@ returns `pBool( true )` if `term` is less or equal to `other`; `pBool( false )` 
 > pgreaterInt.$( term ).$( other )
 > ```
 
-returns `pBool( true )` if `term` is strictly grather than `other`; `pBool( false )` otherwise
+returns `pBool( true )` if `term` is strictly greater than `other`; `pBool( false )` otherwise
 
 ## gtEq
 
@@ -220,4 +220,4 @@ returns `pBool( true )` if `term` is strictly grather than `other`; `pBool( fals
 > pgreaterEqInt.$( term ).$( other )
 > ```
 
-returns `pBool( true )` if `term` is grather or equal to `other`; `pBool( false )` otherwise
+returns `pBool( true )` if `term` is greater or equal to `other`; `pBool( false )` otherwise

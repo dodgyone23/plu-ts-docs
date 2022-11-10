@@ -1,1 +1,51 @@
 # TermStr
+
+
+type definition:
+```ts
+type TermStr = Term<PString> & {
+
+    readonly utf8Encoded: TermBS
+    
+    readonly concatTerm:    TermFn<[ PString ], PString>
+    readonly concat:        ( other: Term<PString> ) => TermStr
+
+    readonly eqTerm:    TermFn<[ PString ], PBool >
+    readonly eq:        ( other: Term<PString> ) => TermBool
+}
+```
+
+## utf8Encoded
+
+> returns `TermStr`
+> 
+> equivalent expression:
+> ```ts
+> pencodeUtf8.$( term )
+> ```
+
+## concat
+
+> parameter: `other` type: `Term<PString>`
+> 
+> returns: `TermStr`
+> 
+> equivalent expression:
+> ```ts
+> pappendStr.$( term ).$( other )
+> ```
+
+returns the result of concatenating the term on which the method is defined on and the `other` argument,
+
+## eq
+
+> parameter: `other` type: `Term<PString>`
+> 
+> returns: `TermBool`
+> 
+> equivalent expression:
+> ```ts
+> peqStr.$( term ).$( other )
+> ```
+
+string equality

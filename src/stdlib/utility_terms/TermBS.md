@@ -42,21 +42,101 @@ type TermBS = Term<PByteString> & {
 
 }
 ```
-## or
+## length
 
-> parameter: `other` type: `Term<PBool>`
-> 
-> returns `TermBool`
+> returns `TermInt`
 > 
 > equivalent expression:
 > ```ts
-> por.$( term ).$( other )
+> plengthBs.$( term )
 > ```
 
-or boolean expression
+## utf8Decoded
 
+> returns `TermStr`
+> 
+> equivalent expression:
+> ```ts
+> pdecodeUtf8.$( term )
+> ```
 
+## concat
 
+> parameter: `other` type: `Term<PByteString>`
+> 
+> returns: `TermBS`
+> 
+> equivalent expression:
+> ```ts
+> pappendBs.$( term ).$( other )
+> ```
+
+concatenates the bytestring on which the method is defined on with the one passed as argument and returns a new bytestring as result of the operation
+
+## prepend
+
+> parameter: `byte` type: `Term<PInt>`
+> 
+> returns: `TermBS`
+> 
+> equivalent expression:
+> ```ts
+> pconsBs.$( byte ).$( term )
+> ```
+
+expects the `byte` argument to be an integer in the range `0 <= byte <= 255`
+
+adds a single byte at the start of the term the method is defined on and returns a new bytestring as result.
+
+## subByteString
+
+> parameter: `fromInclusive` type: `Term<PInt>`
+> 
+> parameter: `ofLength` type: `Term<PInt>`
+> 
+> returns: `TermBS`
+> 
+> equivalent expression:
+> ```ts
+> psliceBs.$( fromInclusive ).$( ofLength ).$( term )
+> ```
+
+takes `fromInclusive` as index of the first byte to include in the result and the expected length as `ofLength` as second parameter.
+
+returns `ofLength` bytes starting from the one at index `fromInclusive`.
+
+somewhat more efficient than `slice` as it maps directly to the builtin `psliceBs` function.
+
+## slice
+
+> parameter: `fromInclusive` type: `Term<PInt>`
+> 
+> parameter: `toExclusive` type: `Term<PInt>`
+> 
+> returns: `TermBS`
+> 
+> equivalent expression:
+> ```ts
+> psliceBs.$( fromInclusive ).$( psub.$( toExclusive ).$( fromInclusive ) ).$( term )
+> ```
+
+takes `fromInclusive` as index of the first byte to include in the result
+and `toExclusive` as the index of the first byte to exclude
+
+returns the bytes specified in the range
+
+## at
+
+> parameter: `index` type: `Term<PInt>`
+> 
+> returns: `TermInt`
+> 
+> equivalent expression:
+> ```ts
+> pindexBs.$( term ).$( index )
+> ```
+
+returns an integer in range `0 <= byte <= 255` representing the byte at position `index`
 
 ## eq
 
@@ -66,10 +146,10 @@ or boolean expression
 > 
 > equivalent expression:
 > ```ts
-> peqInt.$( term ).$( other )
+> peqBs.$( term ).$( other )
 > ```
 
-integer equality
+bytestring equality
 
 ## lt
 
@@ -79,10 +159,20 @@ integer equality
 > 
 > equivalent expression:
 > ```ts
-> plessInt.$( term ).$( other )
+> plessBs.$( term ).$( other )
 > ```
 
 returns `pBool( true )` if `term` is strictly less than `other`; `pBool( false )` otherwise
+
+> **_NOTE_** bytestrings are ordered _lexicographically_
+>
+> meaning that two strings are compared byte by byte
+>
+> if the the byte of the first bytestring is less than the byte of the second; the first is considered less;
+>
+> if it the two bytes are equal it checks the next
+>
+> if the second is less than the first; the second is considered less;
 
 ## ltEq
 
@@ -92,10 +182,10 @@ returns `pBool( true )` if `term` is strictly less than `other`; `pBool( false )
 > 
 > equivalent expression:
 > ```ts
-> plessEqInt.$( term ).$( other )
+> plessEqBs.$( term ).$( other )
 > ```
 
-returns `pBool( true )` if `term` is less or equal to `other`; `pBool( false )` otherwise
+returns `pBool( true )` if `term` is less or equal than `other`; `pBool( false )` otherwise
 
 ## gt
 
@@ -105,10 +195,10 @@ returns `pBool( true )` if `term` is less or equal to `other`; `pBool( false )` 
 > 
 > equivalent expression:
 > ```ts
-> pgreaterInt.$( term ).$( other )
+> pgreaterBS.$( term ).$( other )
 > ```
 
-returns `pBool( true )` if `term` is strictly grather than `other`; `pBool( false )` otherwise
+returns `pBool( true )` if `term` is strictly greater than `other`; `pBool( false )` otherwise
 
 ## gtEq
 
@@ -118,7 +208,7 @@ returns `pBool( true )` if `term` is strictly grather than `other`; `pBool( fals
 > 
 > equivalent expression:
 > ```ts
-> pgreaterEqInt.$( term ).$( other )
+> pgreaterEqBS.$( term ).$( other )
 > ```
 
-returns `pBool( true )` if `term` is grather or equal to `other`; `pBool( false )` otherwise
+returns `pBool( true )` if `term` is greater or equal than `other`; `pBool( false )` otherwise
