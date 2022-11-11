@@ -44,7 +44,8 @@ type TermList<PElemsT extends PDataRepresentable> = Term<PList<PElemsT>> & {
 >
 > However, given a generic `PType` we don't know what is its utility term or even if it has any
 >
-> `UtilityTermOf` handles all that; if `PElemsT` is something that can have an utility term, it returns it; if not returnsthe plain term:
+> `UtilityTermOf` handles all that; if `PElemsT` is something that can have an utility term it returns that utility term;
+> otherwise returns the plain term.
 >
 > _example_
 >

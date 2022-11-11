@@ -14,6 +14,7 @@
             - [builtins](./language/values/functions/builtins.md)
         - [aliases](./language/values/aliases.md)
         - [structs](./language/values/structs.md)
+            - [generic structs](./language/values/generic_structs.md)
         - [terms with methods](./language/values/utility_terms.md)
     - [control flow](./language/control_flow/index.md)
         - [if then else](./language/control_flow/if_then_else.md)

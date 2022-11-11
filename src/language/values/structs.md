@@ -1,6 +1,6 @@
 # structs
 
-When writing programs often we need to access data that is more articulated than simple integers of booleans; for this reason `plu-ts` allows ytou to define custom data-types.
+When writing programs often we need to access data that is more articulated than simple integers or booleans; for this reason `plu-ts` allows ytou to define custom data-types.
 
 ## `pstruct`
 
