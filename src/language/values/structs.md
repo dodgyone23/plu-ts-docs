@@ -1,14 +1,14 @@
 # structs
 
-When writing programs often we need to access data that is more articulated than simple integers or booleans; for this reason `plu-ts` allows ytou to define custom data-types.
+When writing programs often we need to access data that is more articulated than simple integers or booleans; for this reason `plu-ts` allows you to define custom data-types.
 
 ## `pstruct`
 
-To define your own type all you need is the `pstruct` ts function.
+To define your own type all you need is the `pstruct` typescript function.
 
-`pstruct` takes as argument an object that describes the structure of the new data typed; and returns a typescript class that represents our new type.
+`pstruct` takes as argument an object (a `StructDefinition`) that describes the structure of the new data typed; and returns a typescript class that represents our new type.
 
-the type of a struct definition (which is teh argument of `pstruct`) is something like:
+the type of a struct definition (which is the argument of `pstruct`) is something like:
 
 ```ts
 type StructDefiniton = {
@@ -18,7 +18,7 @@ type StructDefiniton = {
 };
 ```
 
-from this typw we can already see that a struct can have *multiple constructors*! (at least one)
+from this type we can already see that a struct can have *multiple* constructors! (at least one)
 
 and each constructor can have 0 or more named fields;
 
@@ -66,21 +66,21 @@ const Dog = pstruct({
 
 > ## IMPORTANT
 >
-> When defining a struct the order of the constructors and the order of the fileds matters
+> When defining a struct the order of the constructors and the order of the fields matters
 >
 > infact at UPLC level there are no names
 >
-> this do have to important implication
+> this does have two important implications
 >
 > 1) structs with similar definition will be interchangeable; meaning that something like
 >       ```ts
->       const Kid = pstruct{
+>       const Kid = pstruct({
 >          Kid: {
 >               name: str,
 >               age: Age.type,
 >               toy: Toy.type
 >           }
->       }
+>       });
 >       ```
 >       can be used in place of a `Dog` without anything breaking
 >
