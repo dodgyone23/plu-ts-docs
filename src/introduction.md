@@ -11,7 +11,7 @@ this documentation is for `plu-ts` v0.1.1^, if you are using a previous version 
 It is composed by two main parts:
 
 - `plu-ts/onchain`: an [eDSL](https://en.wikipedia.org/wiki/Domain-specific_language#External_and_Embedded_Domain_Specific_Languages) (embedded Doamin Specific Language) that laverages Typescript as host language; designed to generate efficient Smart Contracts;
-- `plu-ts/offchan`: a set of classes and funcitons that allow to reuse the onchain types;
+- `plu-ts/offchain`: a set of classes and functions that allow to reuse the onchain types;
 
 ## Design principles
 
