@@ -1,14 +1,14 @@
 # structs
 
-When writing programs often we need to access data that is more articulated than simple integers or booleans; for this reason `plu-ts` allows you to define custom data-types.
+When writing programs we often need to access data that is more articulate than simple integers or booleans; for this reason `plu-ts` allows ytou to define custom data-types.
 
 ## `pstruct`
 
 To define your own type all you need is the `pstruct` typescript function.
 
-`pstruct` takes as argument an object (a `StructDefinition`) that describes the structure of the new data typed; and returns a typescript class that represents our new type.
+`pstruct` takes as an argument an object that describes the structure of the new data-type and returns a Typescript class that represents our new type.
 
-the type of a struct definition (which is the argument of `pstruct`) is something like:
+the type of a struct definition (which is teh argument of `pstruct`) is something like:
 
 ```ts
 type StructDefiniton = {
@@ -18,15 +18,13 @@ type StructDefiniton = {
 };
 ```
 
-from this type we can already see that a struct can have *multiple* constructors! (at least one)
+From this type we can already see that a struct can have *multiple constructors* (at least one) and each constructor can have 0 or more named fields.
 
-and each constructor can have 0 or more named fields;
+This characteristic of having multiple constructors will allow for the creation of *custom control flows* through the use of [`pmatch` described in its own section](../control_flow/pmatch.md).
 
-this characteristic of having multiple constructors will allow the creation of *custom control flows* through the use of [`pmatch` described in its own section](../control_flow/pmatch.md).
+For now let's focus on defining some new structs and say we wanted to define a datatype that describes a Dog.
 
-for now lets focus on defning some new structs and say we wanted to define a datatype that describes a Dog
-
-we could do so by writing:
+We could do so by writing:
 ```ts
 // structs with single constructors acts in a similar way of plain typescript object
 const Dog = pstruct({
@@ -38,7 +36,7 @@ const Dog = pstruct({
 });
 ```
 
-but our dog needs some toys to play with when we are out; so we define a structure that describes some toys
+but our dog needs some toys to play with when we are out. So we define a structure that describes some toys:
 
 ```ts
 const Toy = pstruct({
@@ -53,7 +51,7 @@ const Toy = pstruct({
     }
 })
 ```
-so now we can add a new field to better describe our dog
+So now we can add a new field to better describe our dog:
 ```ts
 const Dog = pstruct({
     Dog: {
@@ -89,9 +87,9 @@ const Dog = pstruct({
 
 ## struct values
 
-To build a `plu-ts` value that rapresents a struct you just use one fo the constructors you defined;
+To build a `plu-ts` value that represents a struct you just use one of the constructors you defined.
 
-so if you where to create an instance of a `Dog` you'd just write:
+So if you where to create an instance of a `Dog` you'd just write:
 ```ts
 const myDog = Dog.Dog({
 
