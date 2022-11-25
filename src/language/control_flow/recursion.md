@@ -1,8 +1,8 @@
 # recursion
 
-The other thing we are missing to have a proper language is some way to repeat the execution som code.
+The other thing we are missing to have a proper language is some way to repeat the execution of some code.
 
-The functional paradigm doesn't really like things like the loops we have in typescript but that is not a big deal, because instead it likes a lot the functions, and functions can be made recursive.
+The functional paradigm doesn't really like things like the loops we have in Typescript but that is not a big deal, because we can use recursive functions instead.
 
 > _Wait a second!_ 
 >
@@ -12,17 +12,17 @@ The functional paradigm doesn't really like things like the loops we have in typ
 
 Turns out someone else already came up with a solution for that so that we don't have to.
 
-That solution is the **Y combinator** (actually we'll use the _Z combinator_ but whatever)
+That solution is the **Y combinator** (actually we'll use the _Z combinator_ but whatever).
 
 > We'll not go in the details on how it works, but if you are a curious one here's a great article that explains the [Y combinator in javascript terms](https://medium.com/swlh/y-and-z-combinators-in-javascript-lambda-calculus-with-real-code-31f25be934ec)
 
 All you need to know is that it allows functions to have themselves as parameters, and this solves everything!
 
-In `plu-ts` there is a special typescript function that makes `plu-ts` functions recursive, and its named, you guessed it, `precursive`.
+In `plu-ts` there is a special typescript function that makes `plu-ts` functions recursive, and it's named, you guessed it, `precursive`.
 
-All `precursive` requires to make a `plu-ts` function recursive is that as first parameter it can pass the function, and then we can do whatever we want with it.
+All `precursive` requires to make a `plu-ts` function recursive is that we pass the function as the first parameter, and then we can do whatever we want with it.
 
-So let's try to define a `plu-ts` function that caluclates the factorial of a positive number
+So let's try to define a `plu-ts` function that caluclates the factorial of a positive number:
 
 ```ts
 const pfactorial = precursive(
@@ -55,6 +55,6 @@ const pfactorial = precursive(
 )
 ```
 
-now we can use `pfactorial` just like a normal function; this is because `precursive` takes care of passing the first argument, so that the actual type of `pfactorial` is just `lam( int, int )`
+Now we can use `pfactorial` just like a normal function; this is because `precursive` takes care of passing the first argument, so that the actual type of `pfactorial` is just `lam( int, int )`
 
-the next step is learn to [evaluate expressions](../evalScript.md) so that we can be sure that `pfactorial` is working as we expect
+The next step is to learn how to [evaluate expressions](../evalScript.md) so that we can be sure that `pfactorial` is working as we expect.

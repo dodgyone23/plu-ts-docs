@@ -1,22 +1,21 @@
 # terms with methods
 
-Like in the case of `papp` that is meant to work with `plu-ts` function as first argument; there are functions that are meant to work with specific types
+Like in the case of `papp` that is meant to work with a `plu-ts` function as the first argument, there are functions that are meant to work with specific types.
 
-the functions can of course be used as normal but sometimes some arguments can be made implicit;
+The functions can of course be used as normal but sometimes some arguments can be made implicit.
 
-as an example the builtin `padd` is meant to work with integers
+As an example, the built-in `padd` is meant to work with integers, so it would be great if instead of writing:
 
-so it would be great if instead of writing
 ```ts
 padd.$( int1 ).$( int2 )
 ```
-we could make the first argument implicit and just do
+we could make the first argument implicit and just do:
+
 ```ts
 int1.add( int2 )
 ```
-turns out `plu-ts` implements some special terms that are extending the normal `Term` functionalities adding some methods to them.
 
-for most of the types there is a special `Term` type with extended functionalities
+Turns out `plu-ts` implements some special terms that extend the normal `Term` functionalities, adding some methods to them. For most of the types there is a special `Term` type with extended functionalities:
 
 normal term                 | term with methods
 ----------------------------|--------------------
@@ -38,9 +37,10 @@ These are callde "**utility terms**" and are covered more in depth in the [stand
 
 ## I see two properties that look similar, which one should I use?
 
-every _utility term_ exposes two variants for each property it has; one is a plain function and the other (the one that ends with "...Term") that is the `plu-ts` version of it.
+Every _utility term_ exposes two variants for each property it has; one is a plain function and the other (the one that ends with "...Term") that is the `plu-ts` version of it.
 
 Let's take a look at the `TermInt` definition:
+
 ```ts
 type TermInt = Term<PInt> & {
 
@@ -59,10 +59,10 @@ type TermInt = Term<PInt> & {
 }
 ``` 
 
-generally speaking you want to use the ts function version for two reasons:
+Generally speaking you want to use the ts function version for two reasons:
 1) is more readable
 2) might produce slightly less code (hence is more efficient)
 
-however the fact that is defined as a function makes it unable to be passed as argument to `plu-ts` higher oreder functions (or a normal ts functions that expects `Term<PLam>` as argument);
+However, the fact that is defined as a function makes it unable to be passed as argument to `plu-ts` higher oreder functions (or a normal ts functions that expects `Term<PLam>` as argument).
 
-in that case you want to use the "...Term" alternative; which is optimized exactly for that.
+In that case you want to use the "...Term" alternative which is optimized exactly for that.
