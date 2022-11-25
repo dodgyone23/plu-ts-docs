@@ -1,9 +1,8 @@
 # aliases
 
-In some cases it might be useful to define aliases for already existing types;
+In some cases it might be useful to define aliases for already existing types.
 
-as for the current implementation aliases do not really have any specific advantage other than making your code more expressive;
-currently aliases can be used everywhere the aliased type is accepted and vice-versa
+In the current implementation, aliases do not really have any specific advantage other than making your code more expressive. Currently, aliases can be used everywhere the aliased type is accepted and vice-versa.
 
 > generally speaking you may want to use aliases to define a *subset* of values that are meant to have a specific meaning
 >
@@ -11,14 +10,14 @@ currently aliases can be used everywhere the aliased type is accepted and vice-v
 >
 > to make clear the distinction you define an alias of the `string` type to be the `Name` type
 
-We define new aliases using the `palias` ts function
+We define new aliases using the `palias` ts function:
 
 ```ts
 const Age = palias( int );
 ```
-now we have a new type to represent specifically Ages.
+Now we have a new type to specfically represent ages.
 
-to get a term of the aliased type you can use the `from` static method of the class you got from calling `palias`
+To get a term of the aliased type you can use the `from` static method of the class you got from calling `palias`:
 ```ts
 const someAge: Term<typeof Age> = Age.from( pInt(18) ); 
 ```
@@ -31,14 +30,12 @@ const someAge: Term<typeof Age> = Age.from( pInt(18) );
 
 ## What's the `plu-ts` type of my alias?
 
-as explained in the [types](./types.md) section; aliases and structs have different `plu-ts` level types;
-
-to access them we need to use the `type` static method defined in the Alias class:
+As explained in the [types](./types.md) section, aliases and structs have different `plu-ts` level types. To access them we need to use the `type` static method defined in the Alias class:
 
 ```ts
 const agePlutsType = Age.type;
 ```
-so if we want to define a function that accepts an `Age` as input we would write
+So if we want to define a function that accepts an `Age` as input we would write:
 ```ts
 const pisAdult = plam( Age.type, bool )
 ( age => 

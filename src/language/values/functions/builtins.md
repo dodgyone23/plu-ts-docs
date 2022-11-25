@@ -1,7 +1,7 @@
 # builtins
 
-Fortunately UPLC does have some basic functions that allow build more complex ones when needed
+Fortunately UPLC does have some basic functions that allow us to build more complex ones when needed.
 
-we already encoundered `peqInt` while introducing `plam` exactly because we needed a way to interact with our terms
+We already encountered `peqInt` while introducing `plam` exactly because we needed a way to interact with our terms.
 
-the [Plutonomicon open source repository](https://github.com/Plutonomicon/plutonomicon/blob/main/builtin-functions.md) has some great docs explaining the behaviour of each builtin aviable
+The [Plutonomicon open source repository](https://github.com/Plutonomicon/plutonomicon/blob/main/builtin-functions.md) has some great docs explaining the behavior of each builtin available.
