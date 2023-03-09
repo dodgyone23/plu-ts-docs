@@ -1,0 +1,44 @@
+---
+sidebar_position: 6
+---
+# `TermPair<PFstT,PSndT>`
+
+type definition:
+```ts
+type TermPair<PFst extends PType, PSnd extends PType> = Term<PPair<PFst,PSnd>> & {
+
+    readonly fst: UtilityTermOf<PFst>
+
+    readonly snd: UtilityTermOf<PSnd>
+    
+}
+```
+
+
+## `fst`
+
+:::note `head`
+
+returns: `UtilityTermOf<PFstT>`
+
+equivalent expression:
+```ts
+pfstPair( fstT, sndT ).$( term )
+```
+:::
+
+returns the first element of the pair
+
+## `snd`
+
+:::note `snd`
+
+returns: `UtilityTermOf<PSndT>`
+
+equivalent expression:
+```ts
+psndPair( fstT, sndT ).$( term )
+```
+:::
+
+returns the second element of the pair

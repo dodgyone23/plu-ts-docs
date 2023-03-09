@@ -1,0 +1,99 @@
+---
+sidebar_position: 2
+---
+
+# Types
+
+As we saw in [Concepts](./Concepts) `plu-ts` is an eDSL embedded in Typescript, as such we have two type systems; the Typescript one and the `plu-ts` one 
+
+## Typescript Types
+- `Term` is a Typescript type defined in `plu-ts`. 
+- Every value in `plu-ts` is a `Term`. In Typescript, we say each value *extends* Term (in the same way that "Dog" extends "Mammal").
+- A `Term` also keeps track of the type of the value it holds. 
+
+The possible types a `Term` can keep track of are defined in [PTypes](https://github.com/HarmonicLabs/plu-ts/tree/main/src/onchain/pluts/PTypes), and listed here:
+
+- `PUnit` a unique value that has no real meaning; you can see it as `plu-ts` version of `undefined` or `null` in Typescript
+- `PInt` a signed integer that can be as big as you want
+- `PBool` a boolean value
+- `PByteString` equivalent of a `Buffer` or a [`Uint8Array`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Uint8Array)
+- `PString` equivalent of the Typescript `string`
+- `PData` equivalent of the `object` type in Typescript (it is the low level representation of `PStruct`s that we'll cover in a moment, so you usually won't use `PData`)
+- `PList<PType>` equivalent of an Array in Typescript; note that all the elements in the list must be of the same `PType`
+- `PPair<PType1, PType2>` equivalent of a Typescript tuple (`[ type1 , type2 ]`)
+- `PDelayed<PType>` a delayed computation that returns a value of type `PType`; the computation can be run by passing the delayed value to the `pforce` function
+- `PLam<PInput, POutput>` a function that takes one single argument of type `PInput` and returns something of type `POutput`
+- `PFn<[ PInput_0 , ...PType[] ],POutput>` a function that takes multiple arguments (at least one) and returns something of type `POutput`
+- `PAlias<PType>` just an alias of the provided type; it behaves exactly like the Types of its argument, so `PAlias<PInt>` is equivalent to a `PInt`. This is useful for keeping track of a different meaning the type might have.
+- `PStruct<{...}>` an abstraction over `PData`, useful to construct more complex data structures.
+
+## `plu-ts` Types
+
+`plu-ts` would not be a strongly typed language if limited to Typescript types, because the types of Typescript are only useful during compilation to javascript; and then everything is untyped!
+
+:::info
+Typescript can be compiled to Javascript. When this happens, the resulting Javascript is untyped!
+
+For this reason `plu-ts` implements its own type through some constants and functions that can be imported.
+:::
+
+
+In the same order of above, the `plu-ts` equivalents are:
+
+- `PUnit` -> `unit`
+- `PInt` -> `int`
+- `PBool` -> `bool`
+- `PByteString` -> `bs`
+- `PString` -> `str`
+- `PData` -> `data`
+- `PList` -> `list( type )`
+- `PPair` -> `pair( type1, type2 )`
+- `PDelayed` -> `delayed( type )`
+- `PLam` -> `lam( from, to )`
+- `PFn` -> `fn([ ...inputs ], output )`
+- aliases types and structs types will be retreived by the `type` static property of the classes (explained in the dedicated section for [aliases](./aliases.md) and [structs](./structs.md))
+
+## `plu-ts` generics
+
+As we know, Typescript gives us the possibility to define polymorphic types trough generics.
+
+In a way you could see generics as _functions_ that take a type as input and returns another type.
+
+Fortunately for us, `plu-ts` types are just values when seen from the Typescript world, so we can have some sort of generic in `plu-ts` too!
+
+To see how, let's try to define the previous polymorphic types using the generic method:
+```ts
+const anyPlutsFunction = ( a: TermType, b: TermType ) => lam( a, b );
+
+const identityFunctionType = ( a: TermType ) => lam( a, a );
+
+const mkPairType = ( a: TermType, b: TermType ) => fn([ a, b ], pair( a, b ) )
+```
+
+Polymorphic types defined as functions also have the advantage of being fully defined once the type arguments are passed.
+
+This works great, but there's still a problem though... Typescript isn't able to infer these types!
+
+This is because `TermType` is the generic type for all `plu-ts` types, so when Typescript tries to infer the type of the term, it sees the most generic type of all, and once again thinks we want to use the anonymous `PType`.
+
+To finally solve this problem we need to make the functions generic too:
+```ts
+function anyFunction<A extends TermType, B extends TermType>( a: A, b: B )
+{ 
+    return lam( a, b ) 
+};
+
+function identityFunctionType<A extends TermType>( a: A )
+{ 
+    return lam( a, a ) 
+};
+
+function mkPairType<A extends TermType, B extends TermType>( a: A, b: B )
+{ 
+    return fn([ a, b ], pair( a, b ) ) 
+};
+```
+
+This way Typescript first infers the specific `TermType` we are passing, and with that is able to determine the exact type of the Term.
+
+Generics will turn useful especially in the case where the type requires a type variable as return type, a notable example is `pif` which is of type `bool -> a -> a -> a`.

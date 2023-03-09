@@ -1,0 +1,62 @@
+---
+sidebar_position: 0
+---
+
+# `Term` evaluation
+
+`plu-ts` implements its own version of the [CEK machine](https://en.wikipedia.org/wiki/CEK_Machine) for the UPLC language. This allows any `plu-ts` term to be compiled to an UPLC Term and evaluated.
+
+in order to evaluate a term we neet to import the CEK machine implemented in `plu-ts`
+
+```ts
+import { Machine } from "@harmoniclbs/plu-ts"
+```
+
+`Machine` is a class, because we can instantiate our own machines based on different protocol parameters.
+
+however it also works as is using some default parameters.
+
+if all we need is just to evaluate a term, then that works just fine.
+
+## `Machine.evalSimple`
+
+The function that evaluates `Term`s is `Machine.evalSimple`, and that's literally all you need to evaluate a term.
+
+`Machine.evalSimple` will return an `UPLCTerm` because `UPLCTerm`s is what the machine is working with.
+
+A `UPLCTerm` can be a lot of things,
+but if everything goes right and you expect a concrete value you'll only encounter `UPLCConst` instances, or some `Lambda` if you instead expect some functions. 
+
+If instead the `plu-ts` term you passed as argument fails the computation you will get back an instance of `ErrorUPLC`.
+
+To test it we'll use the `pfactorial` we defined while introducing [recursion](../Control%20Flow/precursive)
+```ts
+import { Machine } from "@harmoniclbs/plu-ts"
+import { pfactorial } from "./pfactorial";
+
+console.log(
+    Machine.evalSimple(
+        pfactorial.$( 0 )
+    )
+); // UPLCConst { _type: [0], _value: 1n }
+
+console.log(
+    Machine.evalSimple(
+        pfactorial.$( 3 )
+    )
+); // UPLCConst { _type: [0], _value: 6n }
+
+console.log(
+    Machine.evalSimple(
+        pfactorial.$( 5 )
+    )
+); // UPLCConst { _type: [0], _value: 120n }
+
+console.log(
+    Machine.evalSimple(
+        pfactorial.$( 20 )
+    )
+); // UPLCConst { _type: [0], _value: 2432902008176640000nn }
+```
+
+`Machine.evalSimple` is especially useful if you need to test your `plu-ts` code; regardless of the testing framework of your choice you will be always able to run `Machine.evalSimple`.

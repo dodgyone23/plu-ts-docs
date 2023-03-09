@@ -1,0 +1,66 @@
+---
+sidebar_position: 2
+---
+
+# `precursive`
+
+The other thing we are missing to have a proper language is some way to repeat the execution of some code.
+
+The functional paradigm doesn't really like things like the loops we have in Typescript but that is not a big deal, because we can use recursive functions instead.
+
+> _Wait a second!_ 
+>
+> Don't we need to reference the same function we are defining in order to make it recursive?
+>
+> How do we do that if we need what we are defining while defining it?
+
+Turns out someone else already came up with a solution for that so that we don't have to.
+
+That solution is the **Y combinator** (actually we'll use the _Z combinator_ but whatever).
+
+:::note
+
+We'll not go in the details on how it works, but if you are a curious one here's a great article that explains the [Y combinator in javascript terms](https://medium.com/swlh/y-and-z-combinators-in-javascript-lambda-calculus-with-real-code-31f25be934ec)
+
+:::
+
+All you need to know is that it allows functions to have themselves as parameters, and this solves everything!
+
+In `plu-ts` there is a special typescript function that makes `plu-ts` functions recursive, and it's named, you guessed it, `precursive`.
+
+All `precursive` requires to make a `plu-ts` function recursive is that we pass the function as the first parameter, and then we can do whatever we want with it.
+
+So let's try to define a `plu-ts` function that caluclates the factorial of a positive number:
+
+```ts
+const pfactorial = precursive(
+    pfn([
+        // remember that the first argument is the function itself?
+        // for this reason as first type we specify
+        // what will be the final type of the function
+        // because what we have here IS the function itself
+        // highlight-next-line
+        lam( int, int ),
+        int
+    ],  int)
+    (( self, n ) =>
+        pif( int ).$(
+            n.ltEq( 1 )
+        )
+        .then( 1 )
+        .else(
+            // highlight-start
+            // here we are applying this same function
+            // this is the equivalent of writing 
+            // `pfactorial.$( n.sub( 1 ) )`
+            self.$( n.sub( 1 ) )
+            // highlight-end
+            .mult( n )
+        )
+    )
+)
+```
+
+Now we can use `pfactorial` just like a normal function; this is because `precursive` takes care of passing the first argument, so that the actual type of `pfactorial` is just `lam( int, int )`
+
+The next step is to learn how to [evaluate expressions](../evalScript.md) so that we can be sure that `pfactorial` is working as we expect.
