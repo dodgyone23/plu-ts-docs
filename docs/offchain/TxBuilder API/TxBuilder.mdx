@@ -1,0 +1,62 @@
+---
+sidebar_position: 0
+---
+
+# `TxBuilder`
+
+`plu-ts/offchain` exposes the `TxBuilder` class.
+
+## Why?
+
+Its purpose is to allow you to build transactions more easly.
+
+You could infact build transactions by calling the `Tx` constructor.
+
+However that requires a profound understanding of the structure of a Cardano transaction.
+
+for this reason we have the `TxBuilder`.
+
+You can get your `TxBuilder` instance by specifying the network to operate in (`"mainnet" | "testnet"`) and its protocol paramters (that you'll need to query)
+
+```ts
+const txBuilder = new TxBuilder(
+    "mainnet",
+    await fetch("https://some-api.com/get-my-protocol-params")
+)
+```
+
+## What does it do?
+
+once you have your tx builder you can use it to build (and validate transactions).
+
+it has 2 main methods: `build` and `buildSync`.
+
+As for now `build` is really just wrapping `buildSync` in a `Promise`;
+but in a future version it will be able to offload eventual smart contracts validation to a [`Worker`](https://developer.mozilla.org/en-US/docs/Web/API/Worker).
+
+The `buildSync` interface is:
+```ts
+ buildSync({
+        inputs,
+        changeAddress,
+        outputs,
+        readonlyRefInputs,
+        requiredSigners,
+        collaterals,
+        collateralReturn,
+        mints,
+        invalidBefore,
+        invalidAfter,
+        certificates,
+        withdrawals,
+        metadata,
+        protocolUpdateProposal
+    }: ITxBuildArgs,
+    {
+        onScriptInvalid,
+        onScriptResult
+    }: ITxBuildOptions = {}
+): Tx
+```
+
+and it is inspired by `cardano-cli`.

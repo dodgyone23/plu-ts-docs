@@ -1,0 +1,829 @@
+---
+sidebar_position: 0
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Hello plu-ts
+
+Write a smart contract in 5 minutes; deploy it in 10. Enjoy it forever.
+
+## Pre-requisites
+
+To build a Smart contract and interact with it all we need is `plu-ts` and some way to submit transactions.
+
+Infact, `plu-ts` allows you to write the smart contract and create transactions.
+
+To submit the tranasction we will use the [koios](https://www.koios.rest/) API, with a simple POST request to the [submit endpoint](https://api.koios.rest/#post-/submittx);
+but we'll think about that later.
+
+So our pre-requisites add up to:
+
+- `plu-ts` (and `npm` to install it)
+- anything that can run javascript (server environment or browser, doesn't matter)
+- an internet connection
+
+## Project set up
+
+usign `git` we clone a very simple template project:
+```bash
+git clone https://github.com/HarmonicLabs/plu-ts-starter.git
+mv plu-ts-starter hello-pluts
+cd hello-pluts
+```
+
+this gives us a simple project structure:
+```
+./hello-pluts
+├── package.json
+├── package-lock.json
+├── README.md
+├── src
+│   ├── contract.ts
+│   ├── index.ts
+│   ├── MyDatum
+│   │   └── index.ts
+│   └── MyRedeemer
+│       └── index.ts
+└── tsconfig.json
+```
+
+Now we only need to run `npm install` to automatically add the `plu-ts` library.
+```
+npm install
+```
+
+_et voilà_ we are ready to start!
+
+## The contract
+
+### Template overview
+
+If we now navigate to `src/contract.ts` we see we have a very simple validator already!
+
+```ts title="src/contract.ts"
+import { Address, bool, compile, makeValidator, PaymentCredentials, pBool, pfn, Script, ScriptType, V2 } from "@harmoniclabs/plu-ts";
+import MyDatum from "./MyDatum";
+import MyRedeemer from "./MyRedeemer";
+
+// highlight-start
+
+export const contract = pfn([
+    MyDatum.type,
+    MyRedeemer.type,
+    V2.PScriptContext.type
+],  bool)
+(( datum, redeemer, ctx ) =>
+    // always suceeds
+    pBool( true )
+);
+
+// highlight-end
+
+///////////////////////////////////////////////////////////////////
+// ------------------------------------------------------------- //
+// ------------------------- utilities ------------------------- //
+// ------------------------------------------------------------- //
+///////////////////////////////////////////////////////////////////
+
+export const untypedValidator = makeValidator( contract );
+
+export const compiledContract = compile( untypedValidator );
+
+export const script = new Script(
+    ScriptType.PlutusV2,
+    compiledContract
+);
+
+export const scriptMainnetAddr = new Address(
+    "mainnet",
+    new PaymentCredentials(
+        "script",
+        script.hash
+    )
+);
+
+export const scriptTestnetAddr = new Address(
+    "testnet",
+    new PaymentCredentials(
+        "script",
+        script.hash.clone()
+    )
+);
+
+export default contract;
+```
+
+Let's focus only on the contract for now;
+
+this contract expects a `MyDatum`, a `MyRedeemer` and finally a `PScriptContext` to validate a transaction.
+
+`MyDatum` and `MyRedeemer` are types defined by us respectively in `src/MyDatum/index.ts` and `src/MyRedeemer/index.ts`
+
+```ts title="src/MyDatum/index.ts"
+import { int, pstruct } from "@harmoniclabs/plu-ts";
+
+// modify the Datum as you prefer
+const MyDatum = pstruct({
+    Num: {
+        number: int
+    },
+    NoDatum: {}
+});
+
+export default MyDatum;
+```
+
+```ts title="src/MyRedeemer/index.ts"
+import { pstruct } from "@harmoniclabs/plu-ts";
+
+// modify the Redeemer as you prefer
+const MyRedeemer = pstruct({
+    Option1: {},
+    Option2: {}
+});
+
+export default MyRedeemer;
+```
+
+whereas `PScriptContex` is a predefined data structure that is passed by the `cardano-node` itself that will run our smart contract.
+
+finally, the contract is used in `src/index.ts` which is our entry point.
+
+```ts title="src/index.ts"
+import { script } from "./contract";
+
+console.log("validator compiled succesfully! 🎉\n");
+console.log(
+    JSON.stringify(
+        script.toJson(),
+        undefined,
+        2
+    )
+);
+```
+
+the index just imports `script` from `src/contract.ts` adn prints it out in the json form.
+
+if we go back to `src/contract.ts` we see that the script is obtained using the following steps:
+
+1) adapting the validator to the standard using `makeValidator`
+
+```ts title="src/contract.ts"
+/* ... */
+// highlight-start
+
+export const untypedValidator = makeValidator( contract );
+
+// highlight-end
+export const compiledContract = compile( untypedValidator );
+
+export const script = new Script(
+    ScriptType.PlutusV2,
+    compiledContract
+);
+
+/* ... */
+```
+
+2) compiling the validator with `compile`
+
+```ts title="src/contract.ts"
+/* ... */
+
+export const untypedValidator = makeValidator( contract );
+// highlight-start
+
+export const compiledContract = compile( untypedValidator );
+
+// highlight-end
+export const script = new Script(
+    ScriptType.PlutusV2,
+    compiledContract
+);
+
+/* ... */
+```
+3) wrapping it in a `Script` that can be used offchain
+
+```ts title="src/contract.ts"
+/* ... */
+
+export const untypedValidator = makeValidator( contract );
+
+export const compiledContract = compile( untypedValidator );
+// highlight-start
+
+export const script = new Script(
+    ScriptType.PlutusV2,
+    compiledContract
+);
+
+// highlight-end
+/* ... */
+```
+
+that is all we need for now.
+
+### run the template
+
+If we did every step of above correctly we should be able to run
+```bash
+npm run start
+```
+
+and the output should look like:
+```
+validator compiled succesfully! 🎉
+
+{
+  "type": "PlutusScriptV2",
+  "description": "",
+  "cborHex": "56550100002225333573466644494400c0080045261601"
+}
+```
+
+Well congratulations 🥳!
+
+this is your first compiled smart contract 🎉!
+
+But we won't stop here for sure!
+
+Let's personalize this smart contract.
+
+## Hello plu-ts
+
+We want to personalize the smart contract so that:
+
+- it suceeds if the transaction is signed by us.
+- and we are being polite by saluting the contract.
+
+### introduce an `owner`
+
+To make sure the transaction is signed by us we'll keep track of an `owner` in the datum (the first argument we saw in the contract).
+
+:::info datum
+
+The datum helps us keep track of the history of the input the smart contract is validating.
+
+:::
+
+Currently our datum is a struct, but it could be really anything;
+
+and all we need to keep track of an owner is just a public key hash.
+
+so in `src/contract.ts` we'll change `MyDatum` to `PPubKeyHash`:
+
+```ts title="src/contract.ts"
+import { Address, bool, compile, makeValidator, PaymentCredentials, pBool, pfn, Script, ScriptType, V2 } from "@harmoniclabs/plu-ts";
+import MyDatum from "./MyDatum";
+import MyRedeemer from "./MyRedeemer";
+
+const contract = pfn([
+    // highlight-next-line
+    PPubKeyHash.type,
+    MyRedeemer.type,
+    V2.PScriptContext.type
+],  bool)
+// highlight-next-line
+// we should also change the name of the variable here
+// highlight-next-line
+// from `datum` to `owner`
+// highlight-next-line
+(( owner, redeemer, ctx ) =>
+    // always suceeds
+    pBool( true )
+);
+
+/* ... */
+```
+
+### send messages to the contracts
+
+The second condtion requires us to send some message to the contract.
+
+This is done thanks to the redeemer (or the second argument of a validator).
+
+:::info redeemer
+
+The redeemer is the argument specified by the user that interacts with the smart contract
+
+:::
+
+once again, all we need in order to have a message is just a `bytestring`, nothing more complex,
+
+so we'll change `MyRedeemer` to the primitive type `bs`
+
+```ts title="src/contract.ts"
+import { Address, bool, compile, makeValidator, PaymentCredentials, pBool, pfn, Script, ScriptType, V2 } from "@harmoniclabs/plu-ts";
+import MyDatum from "./MyDatum";
+import MyRedeemer from "./MyRedeemer";
+
+const contract = pfn([
+    PPubKeyHash.type,
+    // highlight-next-line
+    bs,
+    V2.PScriptContext.type
+],  bool)
+// highlight-next-line
+// we should also change the name of the variable here
+// highlight-next-line
+// from `redeemer` to `message`
+// highlight-next-line
+(( owner, message, ctx ) =>
+    // always suceeds
+    pBool( true )
+);
+
+/* ... */
+```
+
+### implement the logic
+
+finally we'll check both the conditions in the body of the function.
+
+so we'll first create a term that checks that the message is the one expected:
+
+```ts
+const isBeingPolite = message.eq("Hello plu-ts");
+```
+
+then we'll check that the transaction is signed by the owner specified in the datum.
+
+to do so we need informations about the tranasaction and who signed it.
+
+That information is passed by the `cardano-node` trough the `PScriptContext`.
+
+we can access it as follows:
+```ts
+const signers =
+    // extract informations on the transaciton
+    ctx.extract("txInfo").in( ({ txInfo }) =>
+    // extract the reqired signers of the transactions
+    txInfo.extract("signatories").in( ({ signatories }) =>
+        // return the signers
+        signatories
+    ));
+```
+
+and finally check that the owner as indeed signed the transaction:
+```ts
+const signedByOwner = signers.some( signer => signer.eq( owner ) );
+```
+
+and finally, we put all together
+
+```ts title="src/contract.ts"
+import { Address, bool, compile, makeValidator, PaymentCredentials, pBool, pfn, Script, ScriptType, V2 } from "@harmoniclabs/plu-ts";
+import MyDatum from "./MyDatum";
+import MyRedeemer from "./MyRedeemer";
+
+const contract = pfn([
+    PPubKeyHash.type,
+    bs,
+    V2.PScriptContext.type
+],  bool)
+(( owner, message, ctx ) => {
+
+    const isBeingPolite = message.eq("Hello plu-ts");
+
+    const signers =
+        // extract informations on the transaciton
+        ctx.extract("txInfo").in( ({ txInfo }) =>
+        // extract the reqired signers of the transactions
+        txInfo.extract("signatories").in( ({ signatories }) =>
+            // return the signers
+            signatories
+        ));
+
+    const signedByOwner = signers.some( signer => signer.eq( owner ) );
+
+    return isBeingPolite.and( signedByOwner );
+});
+
+/* ... */
+
+```
+
+now runing the program with `npm run start` gives us back:
+```
+validator compiled succesfully! 🎉
+
+{
+  "type": "PlutusScriptV2",
+  "description": "",
+  "cborHex": "58fd58fb0100003232323232323232323232222533357346664446600e66e3c00922010c48656c6c6f20706c752d74730013300823371e00200866014002464660180024640026601ceb8dd6180a0009aba1001375c0066eb800800452616225333573400400229408cc01c852891119802980200109801800912999ab9a00214a20024460026aae78dd5001119801000a5eb108c0088d5d01801000911980190801111198028011801800980091111919980398020009801800801198020018011191801119801001000918011198010010009112999aab9f001003133002357420026ae880048d5d09aba2357446ae88d5d11aba2357446ae88d5d100081"
+}
+```
+
+We did it! We wrote our first contract!
+
+## Deployng the Contract
+
+now that we have our personal contract we'll use [Koios] to help us with the offchain.
+
+for better integration we can install the `koios-pluts` package so that we can make requests to koios and have actual plu-ts values.
+```bash
+npm install @hamroniclabs/koios-pluts
+```
+
+eventually we'll also need some help with binary data
+```bash
+npm install @hamroniclabs/uint8array-utils
+```
+
+then to keep the project clean we'll create a new `offchain` folder, under `src`
+
+```bash
+mkdir src/offchain
+```
+
+### create the Koios provider
+
+To make sure we do all our requests in testnet `koios-pluts` exposes teh utility class `KoiosProvoder` which will remember the network we are operating in for us.
+
+let's build an instance:
+```ts title="src/offchain/koios.ts"
+import { KoiosProvider } from "@harmoniclabs/koios-pluts"
+
+export const koios = new KoiosProvider("testnet");
+
+export default koios;
+```
+
+### create the transaction builder
+
+To build a `TxBuilder` we'll need to fetch the current protocol parameters, that is an asyncronous operation;
+
+so we'll write an asnyc function that constructs our transaction builder:
+
+```ts title="src/offchain/getTxBuilder.ts"
+import { koios } from "./koios"
+
+/**
+ * we don't want to do too many API call if we already have our `txBuilder`
+ * 
+ * so after the first call we'll store a copy here.
+**/
+let _cachedTxBuilder: TxBuilder | undefined = undefined
+
+export default async function getTxBuilder(): TxBuilder
+{
+    if(!( _cachedTxBuilder instanceof TxBuilder ))
+    _cachedTxBuilder = new TxBuilder(
+        "testnet",
+        await koios.epoch.protocolParams() // defaults to current epoch
+    );
+
+    return _cachedTxBuilder;
+)
+```
+
+### get some founds
+
+You can use the [Cardano Testnet Faucet](https://docs.cardano.org/cardano-testnet/tools/faucet).
+
+:::info preprod
+
+Just be sure to select the **Preprod** testnet.
+
+:::
+
+:::caution return the test ADA
+
+once you finish with your tADA make sure to return them to the faucet.
+
+tADA have no real world value but are still limited, and onther developers will need them!
+
+to return tADA to the faucet just send them to the following testnet address:
+
+`addr_test1qqr585tvlc7ylnqvz8pyqwauzrdu0mxag3m7q56grgmgu7sxu2hyfhlkwuxupa9d5085eunq2qywy7hvmvej456flknswgndm3`
+
+:::
+
+### build the deploy transaciton
+
+now that we have received our `tADA` we can start playng.
+
+Firs we need to access them in our code.
+
+We can do so by querying the utxos at the address you received the tADA to.
+
+since we'll query our utxos some times we make an utility function for that.
+
+```ts title="src/offchain/queryMyUtxos.ts"
+import type { UTxO } from "@harmoniclabs/plu-ts"
+import { koios } from "./koios";
+
+export default async function queryMyUtxos(): Promise<UTxO[]>
+{
+    return await koios.address.utxos( "<paste your tesnet address here>" )
+)
+```
+
+now that we can access our utxos we can finally start building transactions.
+
+The first transaction we want to do is to deploy the smart contract and found it.
+
+
+Let's check we got everything:
+
+- [x] smart contract
+- [x] `TxBuilder`
+- [x] A way to comunicate with the blockchain
+
+yes, we can go!
+
+```ts title="src/offchain/getDeployAndFoundTx.ts"
+import { Address, PaymentCredentials, Value, DataB } from "@harmoniclabs/plu-ts"
+import { scriptTestnetAddr } from "../contract";
+import getTxBuilder from "./getTxBuilder";
+import queryMyUtxos from "./queryMyUtxos";
+
+
+export default async function getDeployAndFoundTx( script: Script ): Promise<Tx>
+{
+    const txBuilder = await getTxBuilder();
+    const myUTxOs = await queryMyUtxos();
+
+    return txBuilder.buildSync({
+        inputs: [{ utxo: myUTxOs[0] }],
+        outputs: [
+            { // output which holds the reference script
+                address: scriptTestnetAddr,
+                value: Value.lovelaces( 10_000_000 ),
+                // an utxo with no datum that sits 
+                // that a script address (like in this case)
+                // is locked FOREVER
+                // this way no one will be able to "un-deploy" our smart contract
+                datum: undefined,
+                refScript: script
+            },
+            { // output holding the founds that we'll spend later
+                address: scriptTestnetAddr,
+                value: Value.lovelaces( 10_000_000 ),
+                // remeber to include a datum
+                datum: new DataB(
+                    // remember we set the datum to be the public key hash?
+                    // we can extract it from the address as follows
+                    Address.fromString( "<paste your address here>" )
+                    .paymentCreds.hash
+                )
+            }
+        ],
+        // send everything left back to us
+        changeAddress: "<paste your address here>"
+    });
+
+}
+```
+
+now that we have a `Tx` we are just two steps away from it to be registered on-chain:
+
+- sign it
+- submit it
+
+### sign the deploy transaciton
+
+to sign a transaciton you'll need the private key of your address.
+
+depending on your environment then there are two ways to sign it:
+
+<Tabs>
+<TabItem value="Browser" label="Browser" default>
+
+In the browser we can use the [CIP-0030](https://github.com/cardano-foundation/CIPs/tree/master/CIP-0030#apisigntxtx-cbortransaction-partialsign-bool--false-promisecbortransaction_witness_set)
+standard to sign the transaction.
+
+the standard wants us to pass the CBOR of the transaction encoded as hex string.
+
+that is not a problem because we can get it as follows:
+```ts
+tx.toCbor().toString()
+```
+
+it then returns a new CBOR encoded as hex string which represents the signature.
+
+we can add the signature to our transaction as follows:
+```ts
+tx.addVKeyWitness(
+    VKeyWitness.fromCbor(
+        "<CIP-0030 'signTx' result here>"
+    )
+)
+```
+
+so all together becomes
+
+```ts
+async function signWithBrowser( tx: Tx, cip30wallet: any ): void
+{
+    tx.addVKeyWitness(
+        VKeyWitness.fromCbor(
+            await cip30wallet.signTx(
+                tx.toCbor().toString()
+            )
+        )
+    );
+}
+```
+
+</TabItem>
+<TabItem value="NodeJS / Server" label="NodeJS / Server">
+
+If we are in a server environmet is very likely we have our private key stored in some file.
+
+so we can just read the private key from there, all we need is just an hex string of length 64 after all.
+```ts
+const privateKey = new PrivateKey( await fs.readFile("path/to/private.key") );
+```
+
+we can then use the private key to sign the transaction, `plu-ts` handles the cryptography
+
+```ts
+tx.signWith( privateKey )
+```
+
+and that's it
+
+now we just put all together
+```ts
+async function signWithServer( tx: Tx ): void
+{
+    tx.signWith(
+        new PrivateKey( await fs.readFile("path/to/private.key") )
+    );
+}
+```
+
+</TabItem>
+</Tabs>
+
+
+### submit the deploy transaciton
+
+now we can finally deploy the smart contract all we need to do is just call the koios endpoint
+
+```ts title="src/index.ts"
+/* onther imports */
+import { koios } from "./offchain/koios"
+
+/* ... */
+
+async main()
+{
+    let tx = await getDeployAndFoundTx( script );
+    await signTxServer( tx );
+    await koios.tx.submit( tx );
+}
+main();
+```
+
+## Using the Contract
+
+The last step is to build a new trasaction that will allow us to spend the founds we sent to the contract.
+
+### get the reference UTxO
+
+Apart for this step the process very similar.
+
+If you remember we deployed our script to an UTxO that is locked forever.
+
+We need that UTxO to interact with the contract.
+
+we could query but we already have all the infos to build it ourselves.
+
+an `UTxO` is composed by a `TxOutRef` and a `TxOut`
+
+the `TxOutRef is just the hash of the `Tx` that generated it and the index in the order of the outputs.
+
+so our `TxOutRef` is:
+```ts
+const txOutRef = new TxOutRef({
+    id: tx.hash,
+    index: 0
+});
+```
+
+and the `TxOut` is the resolved reference, and we know exactly what's on that utxo:
+```ts
+const txOut = new TxOut({
+    address: scriptTestnetAddr,
+    value: Value.lovelaces( 10_000_000 ),
+    refScript: script
+});
+```
+
+so our reference utxo is
+```ts
+const myRefUtxo = new UTxO({
+    utxoRef: txOutRef,
+    resolved: txOut
+});
+```
+
+### build the transaction
+
+with that utxo reference we can build our tranasction
+
+```ts title="src/offchain/getSpendPoliteTx.ts"
+import { Address, PaymentCredentials, Value, DataB, isData } from "@harmoniclabs/plu-ts"
+import { scriptTestnetAddr } from "../contract";
+import * as uint8array from "@harmoniclabs/uint8array-utils";
+import getTxBuilder from "./getTxBuilder.ts";
+import queryMyUtxos from "./queryMyUtxos.ts";
+
+
+export default async function getSpendPoliteTx( myRefUtxo: UTxO, prevTxHash: Hash32 ): Promise<Tx>
+{
+    const txBuilder = await getTxBuilder();
+    const myUTxOs = await queryMyUtxos();
+
+    // find the other utxo of the previous tx
+    const utxoToSpend = (await getAddressUtxos( scriptTestnetAddr ))
+        .find( utxo => isData( utxo.datum ) );
+
+    if( utxoToSpend === undefined )
+    {
+        throw "uopsie, are you sure your tx had enough time to get to the blockchain?"
+    }
+
+    return txBuilder.buildSync({
+        inputs: [
+            {
+                utxo: utxoToSpend,
+                // we must include the utxo that holds our script
+                referenceScriptV2: {
+                    refUtxo: myRefUtxo,
+                    datum: "inline", // the datum is present already on `utxoToSpend`
+                    redeemer: new DataB( uint8array.fromAscii("Hello plu-ts") ) // be polite
+                }
+            }
+        ],
+        // make sure to include collateral when using contracts
+        collaterals: [ myUTxOs[0] ],
+        // send everything back to us
+        changeAddress: "<paste your address here>"
+    });
+}
+```
+
+### sign and submit
+
+We can re use the fuctions defined above for both signing and submission.
+
+so all we need to do now is really just put everything together
+
+```ts title="src/index.ts"
+import { script, scriptTestnetAddr } from "./contract";
+import { koios } from "./offchain/koios";
+
+/* ... */
+
+async main()
+{
+    let tx = await getDeployAndFoundTx( script );
+    await signTxServer( tx );
+    await koios.tx.submit( tx );
+
+    // highlight-start
+    console.log( "waiting for tx '" + tx.hash.toString() + "' to be on-chain...")
+    await koios.tx.waitConfirmed( tx );
+
+    const myRefUtxo = new UTxO({
+        utxoRef: new TxOutRef({
+            id: tx.hash,
+            index: 0
+        }),
+        resolved: new TxOut({
+            address: scriptTestnetAddr,
+            value: Value.lovelaces( 10_000_000 ),
+            refScript: script
+        })
+    });
+
+    tx = await getSpendPoliteTx( myRefUtxo )
+    await signTxServer( tx );
+    await koios.tx.submit( tx );
+
+    console.log( "waiting for tx '" + tx.hash.toString() + "' to be on-chain...\n\n")
+    await koios.tx.waitConfirmed( tx );
+
+    console.log(
+        `Unlocked ${tx.body.inputs[0].value.lovelaces / BigInt(1_000_00)} tADA ` +
+        `from ${scriptTestnetAddr.toString()}!\n\n` +
+        `Check the transaction on Cardanoscan: https://preview.cardanoscan.io/transaction/${tx.hash.toString()}?tab=contracts`
+    )
+    // highlight-end
+}
+main();
+```
+
+If everything whent trough correctly running the program wiht `npm run start` should now show something like:
+
+```
+Unlocked 10 tADA from addr_test1vabcd... !
+
+Check the transaction on Cardanoscan: https://preview.cardanoscan.io/transaction/beefcaffee...?tab=contracts
+```
