@@ -4,52 +4,62 @@ import styles from './styles.module.css';
 
 type FeatureItem = {
   title: string;
-  Svg: React.ComponentType<React.ComponentProps<'svg'>>;
+  imgSrc: string;
   description: JSX.Element;
+  Attrib: () => JSX.Element
 };
+
+
+const attribStyle: React.CSSProperties = {
+  fontSize: "0.7em",
+  color: "var(--icon-link-color)"
+} 
 
 const FeatureList: FeatureItem[] = [
   {
     title: 'Type Safe',
-    Svg: require('@site/static/img/undraw_docusaurus_mountain.svg').default,
+    imgSrc: 'img/shield.png',
     description: (
       <>
-        Docusaurus was designed from the ground up to be easily installed and
-        used to get your website up and running quickly.
+        <code>plu-ts</code> runs in Javascript but implements its own type system;
+        this way you can be sure about that what you are using is what you are expecting.
       </>
     ),
+    Attrib:() => (<a style={attribStyle} href="https://www.flaticon.com/free-icons/insurance" title="Type Safe">Icon created by iconmas - Flaticon</a>)
   },
   {
-    title: 'Blazingly Fast',
-    Svg: require('@site/static/img/undraw_docusaurus_tree.svg').default,
+    title: 'Designed for efficiency',
+    imgSrc: 'img/speedometer.svg',
     description: (
       <>
-        Docusaurus lets you focus on your docs, and we&apos;ll do the chores. Go
-        ahead and move your docs into the <code>docs</code> directory.
+        <code>plu-ts</code> gives you full controll so that you can minimize both size and script execution costs.
+
       </>
     ),
+    Attrib:() => (<a style={attribStyle} href="https://www.flaticon.com/free-icons/performance" title="Efficient">Icon created by Freepik - Flaticon</a>)
   },
   {
     title: 'All in Typescript',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    imgSrc: 'img/coding.svg',
     description: (
       <>
-        Extend or customize your website layout by reusing React. Docusaurus can
-        be extended while reusing the same header and footer.
+        All the support of the Typescript ecosystem;<br></br> minimal setup;<br></br> ready to be used.
       </>
     ),
+    Attrib:() => (<a style={attribStyle} href="https://www.flaticon.com/free-icons/code" title="in Typescript">Icon created by Roundicons Premium - Flaticon</a>)
   },
 ];
 
-function Feature({title, Svg, description}: FeatureItem) {
+function Feature({title, imgSrc, description, Attrib}: FeatureItem) {
   return (
-    <div className={clsx('col col--4')}>
+    <div className={clsx('col col--4') + " text--cente"}>
       <div className="text--center">
-        <Svg className={styles.featureSvg} role="img" />
+        <img src={imgSrc} className={styles.featureSvg}/>
       </div>
       <div className="text--center padding-horiz--md">
+        <Attrib />
         <h3>{title}</h3>
-        <p>{description}</p>
+        <p style={{ fontSize: "0.95em" }} >{description}</p>
       </div>
     </div>
   );

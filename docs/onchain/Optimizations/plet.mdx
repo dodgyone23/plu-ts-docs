@@ -60,7 +60,7 @@ and for this reason is an extremly powerful tool.
 
 ## "`plet`ting" utility terms methods
 
-When working with [utility terms](../language/values/utility_terms.md) it's important not to forget that the methods
+When working with [utility terms](../../category/stdlib) it's important not to forget that the methods
 are just [partially applied functions](../Values/Functions/partial_function_app) so if you plan to use some of the methods more than once is a good idea to `plet` them.
 
 As an example, when working with the `TermList<PElemsT>` utility term, intuition might lead you to just reuse the `length` property more than once in various places; but actually, each time you do something like `list.length` (where `list` is a `TermList`); you are just writing `plength.$( list )` (as in the first case introduced here) which is an `O(n)` operation!

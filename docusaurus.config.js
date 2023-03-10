@@ -119,15 +119,15 @@ const config = {
               },
               {
                 label: 'examples',
-                to: '/docs/intro',
-              },
-              {
-                label: 'offchain',
-                to: '/docs/intro',
+                to: '/docs/category/examples',
               },
               {
                 label: 'onchain',
-                to: '/docs/intro',
+                to: '/docs/category/onchain',
+              },
+              {
+                label: 'offchain',
+                to: '/docs/category/offchain',
               },
             ],
           },
@@ -151,6 +151,10 @@ const config = {
               {
                 label: 'GitHub',
                 href: 'https://github.com/HarmonicLabs/plu-ts',
+              },
+              {
+                label: 'Harmonic Labs',
+                href: 'https://harmoniclabs.tech',
               },
             ],
           },

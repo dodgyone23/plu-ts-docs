@@ -55,7 +55,7 @@ The answer is _what you expect to happen_. Or, to be more precise, if the error 
 
 This is because even if by default functions are strict, `pif` is _lazy_; meaning that it evaluates only the argument it needs and not the others.
 
-This is done using [`pforce` and `pdelay`](../../optimizations/pfroce_and_pdelay.md) so the compiled funcion is a bit larger than the one you'd expect.
+This is done using [`pforce` and `pdelay`](../Optimizations/pforce%20and%20pdelay) so the compiled funcion is a bit larger than the one you'd expect.
 
 > if you don't need _lazyness_ you can use the `pstrictIf` function that emits slightly less code but evaluates both the arguments.
 > 
