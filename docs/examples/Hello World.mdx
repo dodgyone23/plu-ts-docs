@@ -519,9 +519,9 @@ const myTestnetAddress = new Address(
     "testnet",
     new PaymentCredentials(
         "pubKey",
-        new PublicKey(
+        PublicKey.fromCbor(
             JSON.parse( // the result of `cardano-cli` is a json file
-                fs.readFileSync(
+                readFileSync(
                     "path/to/pubKey.vkey",
                     { encoding: "utf8" }
                 ) 
@@ -689,20 +689,16 @@ async function signWithBrowser( tx: Tx, cip30wallet: any ): void
 
 If we are in a server environmet is very likely we have our private key stored in some file.
 
-so we can just read the private key from there, all we need is just an hex string of length 64 after all.
-```ts
-const privateKey = new PrivateKey( await fs.readFile("path/to/private.key") );
-```
+so we can just read the private key from there.
 
-we can then use the private key to sign the transaction, `plu-ts` handles the cryptography
+Once we have teh private key we can then use it to sign the transaction; `plu-ts` handles the cryptography
 
 ```ts
 tx.signWith( privateKey )
 ```
-
 and that's it
 
-now we just put all together
+so the final code is:
 ```ts
 function signWithServer( tx: Tx ): void
 {
