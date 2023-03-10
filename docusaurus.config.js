@@ -29,7 +29,7 @@ const config = {
   // to replace "en" with "zh-Hans".
   i18n: {
     defaultLocale: 'en',
-    locales: ['en','it'],
+    locales: ['en'],
   },
 
   presets: [
@@ -81,6 +81,11 @@ const config = {
             line: 'highlight-bad-practice',
           },
         ]
+      },
+      docs: {
+        sidebar: {
+          hideable: true,
+        },
       },
       // Replace with your project's social card
       image: 'img/plu-ts.svg',

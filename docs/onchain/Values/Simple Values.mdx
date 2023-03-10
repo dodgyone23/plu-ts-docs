@@ -6,7 +6,7 @@ sidebar_position: 1
 
 For most of the [types](../Types) described there is a function to transform the Typescript version to the `plu-ts` equivalent.
 
-Here we cover the simple ones, leaving [functions](./pluts_functions.md) and [structs](./pluts_structs.md) to be covered later.
+Here we cover the simple ones, leaving [functions](./Functions/plam_and_pfn) and [structs](./Structs/definition) to be covered later.
 
 ## values constructors
 
@@ -42,7 +42,7 @@ And with that we now have a function that transforms an array of terms into a li
 ```ts
 const intList = pListInt( [1,2,3,4].map( pInt ) );
 ```
-You might notice that in contrast to the other functions introduced, `pListInt` that we created works with terms instead of vanilla ts values; this is because `pListInt` acts as a [macro (advanced)](../advanced/ts_macros.md)
+You might notice that in contrast to the other functions introduced, `pListInt` that we created works with terms instead of vanilla ts values; this is because `pListInt` acts as a macro as seen by `plu-ts`.
 
 ## ** `pPair`
 

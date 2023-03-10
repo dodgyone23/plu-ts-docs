@@ -24,7 +24,7 @@ type StructDefiniton = {
 
 From this type we can already see that a struct can have *multiple constructors* (at least one) and each constructor can have 0 or more named fields.
 
-This characteristic of having multiple constructors will allow for the creation of *custom control flows* through the use of [`pmatch` described in its own section](../control_flow/pmatch.md).
+This characteristic of having multiple constructors will allow for the creation of *custom control flows* through the use of [`pmatch` described in its own section](../../Control%20Flow/pmatch).
 
 For now let's focus on defining some new structs and say we wanted to define a datatype that describes a Dog.
 
@@ -110,7 +110,7 @@ const myDog = Dog.Dog({
 
 ## struct `plu-ts` type
 
-Like [aliases](./aliases.md), structs also do have custom `plu-ts` types; which can be accessed using the `type` static property
+Like [aliases](../aliases), structs also do have custom `plu-ts` types; which can be accessed using the `type` static property
 
 ```ts
 const plutsTypeOfToy = Toy.type;

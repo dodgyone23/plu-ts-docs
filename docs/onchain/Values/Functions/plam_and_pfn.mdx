@@ -21,7 +21,7 @@ function plam<A extends TermType, B extends TermType >( inputType: A, outputType
     : ( termFunc : ( input: Term<ToPType<A>> ) => Term<ToPType<B>> ) => Term<PLam<ToPType<A>,ToPType<B>>>
 ```
 
-If this seems familiar it's because it works on the same principle of `pList` we saw in the explanation of [simple values](./Simple%20Values).
+If this seems familiar it's because it works on the same principle of `pList` we saw in the explanation of [simple values](../Simple%20Values).
 
 `plam` first requires us to specify the `plu-ts` types we are working with and it gives back a function ad-hoc for those types.
 ```ts
@@ -38,7 +38,7 @@ In `plu-ts` you *never* need to write anything like `new Term(...)`; rather you 
 
 > *Wait what?* Aren't `plu-ts` functions also Terms? How do I build new Terms if I need other Terms to build new Terms?
 
-Fortunately for us there are some [builtin functions](../optimizations/builtins.md) that form the fundamentals of the language.
+Fortunately for us there are some [builtin functions](./builtins) that form the fundamentals of the language.
 
 We can use these to describe the body of our lambda.
 
@@ -55,7 +55,7 @@ is convention to name `plu-ts` functions starting with a lower case "p"; indicat
 
 :::
 
-Here we are using the `peqInt` builtin function; the `$` method is a short form for the [`papp` function](./papp.md) and is how we pass arguments to a `plu-ts` function (we'll cover function application in the very next section).
+Here we are using the `peqInt` builtin function; the `$` method is a short form for the [`papp` function](./Function_appliaciton) and is how we pass arguments to a `plu-ts` function (we'll cover function application in the very next section).
 
 What matters for now is that we succesfully transformed an `int` into a `bool` using only `plu-ts`; and we now have a new function that we can re-use when needed.
 ```ts

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkplu_ts_docs=self.webpackChunkplu_ts_docs||[]).push([[7918],{6922:(s,c,e)=>{e.d(c,{Z:()=>u});var t=e(7294);const u={React:t,...t}}}]);
